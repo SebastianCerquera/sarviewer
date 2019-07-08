@@ -23,7 +23,19 @@ elif [ "$graph_generator" == "gnuplot" ];then
 	gnuplot cpu.gplot
 	gnuplot ram.gplot
 	gnuplot swap.gplot
-	gnuplot iotransfer.gplot
+
+        for i in $(ls ../../data | perl -ne 'if(/iotransfer\.dat\.+/){@A = split(".dat.", $_); print $A[$#A]}'); do
+	    cp iotransfer.gplot iotransfer.gplot.$i
+            perl -pi -e 's/..\/..\/graphs\/iotransfer\.png/..\/..\/graphs\/iotransfer\.'"$i"'\.png/g' iotransfer.gplot.$i
+            perl -pi -e 's/..\/..\/data\/iotransfer\.dat/..\/..\/data\/iotransfer\.dat.'"$i"'/g' iotransfer.gplot.$i
+            gnuplot iotransfer.gplot.$i
+
+            cp ioutil.gplot ioutil.gplot.$i
+            perl -pi -e 's/..\/..\/graphs\/ioutil\.png/..\/..\/graphs\/ioutil\.'"$i"'\.png/g' ioutil.gplot.$i
+            perl -pi -e 's/..\/..\/data\/iotransfer\.dat/..\/..\/data\/iotransfer\.dat.'"$i"'/g' ioutil.gplot.$i
+            gnuplot ioutil.gplot.$i
+        done
+
 	gnuplot proc.gplot
 	gnuplot contextsw.gplot
 	gnuplot netinterface.gplot
@@ -35,6 +47,8 @@ elif [ "$graph_generator" == "matplotlib" ];then
 	python cpu.py
 	python ram.py
 	python swap.py
+
+        # it is still missing to plot each io device.
 	python iotransfer.py
 	python proc.py
 	python contextsw.py

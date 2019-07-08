@@ -35,8 +35,10 @@ sar_collectors(){
 	sar -S $sample_interval $number_of_samples | grep -v -E "[a-zA-Z]|^$" > data/swap.dat &
 	# Load average and tasks
 	sar -q $sample_interval $number_of_samples | grep -v -E "[a-zA-Z]|^$" > data/loadaverage.dat &
+        
 	# IO transfer
-	sar -b $sample_interval $number_of_samples | grep -v -E "[a-zA-Z]|^$" > data/iotransfer.dat &
+	sar -d $sample_interval $number_of_samples | grep -v -E "Linux|DEV|Average|^$" > data/iotransfer.dat &
+        
 	# Process/context switches
 	sar -w $sample_interval $number_of_samples | grep -v -E "[a-zA-Z]|^$" > data/proc.dat &
 	# Network Interface
@@ -54,7 +56,7 @@ sar_collectors(){
 	echo "- You can abort this script with Ctrl+C, but have in mind the data will stop being collected when you cancel it."
 	echo "- You will also need to manually launch script plotter.sh to generate the graphs."
 	sleep $total_time
-
+        
 	# Added additional sleep of 5 seconds to avoid "warning: Skipping data file with no valid points"
 	echo "----------------------------------"
 	echo ">>> Just 5 seconds more while processing all data"
@@ -97,6 +99,11 @@ if [ "$#" -eq 0 ];then
 	# Begin collecting data with sar
 	sar_collectors
 
+        #Preprocess SAR output        
+        for i in $(sar -d 1 1 | grep -v -E "Linux|DEV|Average|^$" | awk '{print $2}'); do
+            cat data/iotransfer.dat | grep "$i" > data/iotransfer.dat.$i
+        done
+        
 	# Call plotter.sh to generate the graphs
 	./plotter.sh
 
@@ -131,6 +138,11 @@ elif [ "$#" -ne 0 ];then
 	# Begin collecting data with sar
 	sar_collectors
 
+        #Preprocess SAR output
+        for i in $(sar -d 1 1 | grep -v -E "Linux|DEV|Average|^$" | awk '{print $2}'); do
+            cat data/iotransfer.dat | grep "$i" > data/iotransfer.dat.$i
+        done
+        
 	# Call plotter.sh to generate the graphs
 	./plotter.sh
 

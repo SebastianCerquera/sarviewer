@@ -31,12 +31,12 @@ set xdata time
 set timefmt "%H:%M:%S"
 set format x "%H:%M"
 set xlabel "Time"
-set ylabel "Blocks per second"
+set ylabel "Kilobytes per second"
 
 # Background grid
 set style line 11 lc rgb '#aeb6bf' lt 0 lw 2
 set grid back ls 11
 
 # Begin plotting
-plot '../../data/iotransfer.dat' using 1:5 title 'Blocks read per second' with l ls 1, \
-     ''                          using 1:6 title 'Blocks written per second' with l ls 2
+plot '../../data/iotransfer.dat' using 1:4 title 'Kilobytes read per second' with l ls 1, \
+     ''                          using 1:5 title 'Kilobytes written per second' with l ls 2
