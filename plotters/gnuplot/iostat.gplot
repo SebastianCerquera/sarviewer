@@ -5,7 +5,7 @@ reset
 # Terminal config
 set terminal pngcairo enhanced font 'Verdana,8'
 set output '../../graphs/iostat.png'
-set title "Context switches"
+set title "IO Utilization"
 set key bmargin
 
 # Line style
@@ -21,11 +21,11 @@ set xdata time
 set timefmt "%H:%M:%S"
 set format x "%H:%M"
 set xlabel "Time"
-set ylabel "Context switches"
+set ylabel "IO Utilization %"
 
 # Background grid
 set style line 11 lc rgb '#aeb6bf' lt 0 lw 2
 set grid back ls 11
 
 # Begin plotting
-plot '../../data/iostat.dat' using 1:15 title 'IO Utilization over time' with l ls 1
+plot '../../data/iostat.dat' using 1:17 title 'IO Utilization over time' with l ls 1
