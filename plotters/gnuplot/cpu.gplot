@@ -22,6 +22,7 @@ set key bmargin
 set style line 1 lc rgb '#e74c3c' pt 1 ps 1 lt 1 lw 2 # line1
 set style line 2 lc rgb '#3498db' pt 6 ps 1 lt 1 lw 2 # line2
 set style line 3 lc rgb '#28b463' pt 4 ps 1 lt 1 lw 2 # line3
+set style line 4 lc rgb '#f5b041' pt 4 ps 1 lt 1 lw 2 # line4
 
 # Axis configuration
 set style line 11 lc rgb '#2c3e50' lt 1 lw 1.5 # Axis line
@@ -42,4 +43,4 @@ set grid back ls 11
 plot '../../data/cpu.dat' using 1:3 title 'User%' with l ls 1, \
      ''                   using 1:5 title 'System%' with l ls 2, \
      ''                   using 1:8 title 'Idle%' with l ls 3, \
-     ''                   using 1:6 title 'IOWait%' with l ls 3
+     ''                   using 1:6 title 'IOWait%' with l ls 4

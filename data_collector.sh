@@ -37,7 +37,9 @@ sar_collectors(){
 	sar -q $sample_interval $number_of_samples | grep -v -E "[a-zA-Z]|^$" > data/loadaverage.dat &
         
 	# IO transfer
-	sar -d $sample_interval $number_of_samples | grep -v -E "Linux|DEV|Average|^$" > data/iotransfer.dat &
+        DEVICES=$(mount | awk '/^\/dev/{print $1}' | sort | uniq | perl -ne '/\/dev\/(sd\w)\d/ && print $1')
+        iostat -t -x 1 | perl -ne 'if(/'"$DEVICES"'/){print $_} if(/^\d+\/\d+\/\d+\s+(.+)$/){print "$1   "}' > data/iostat.dat &
+	sar -d -p $sample_interval $number_of_samples | grep -v -E "Linux|DEV|Average|^$" > data/iotransfer.dat &
         
 	# Process/context switches
 	sar -w $sample_interval $number_of_samples | grep -v -E "[a-zA-Z]|^$" > data/proc.dat &
@@ -103,6 +105,8 @@ if [ "$#" -eq 0 ];then
         for i in $(sar -d 1 1 | grep -v -E "Linux|DEV|Average|^$" | awk '{print $2}'); do
             cat data/iotransfer.dat | grep "$i" > data/iotransfer.dat.$i
         done
+
+        killall iostat
         
 	# Call plotter.sh to generate the graphs
 	./plotter.sh
@@ -142,6 +146,8 @@ elif [ "$#" -ne 0 ];then
         for i in $(sar -d 1 1 | grep -v -E "Linux|DEV|Average|^$" | awk '{print $2}'); do
             cat data/iotransfer.dat | grep "$i" > data/iotransfer.dat.$i
         done
+
+        killall iostat
         
 	# Call plotter.sh to generate the graphs
 	./plotter.sh

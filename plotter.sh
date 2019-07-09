@@ -36,24 +36,27 @@ elif [ "$graph_generator" == "gnuplot" ];then
             gnuplot ioutil.gplot.$i
         done
 
+        gnuplot iostat.gplot
+        
 	gnuplot proc.gplot
 	gnuplot contextsw.gplot
 	gnuplot netinterface.gplot
 	gnuplot sockets.gplot
 elif [ "$graph_generator" == "matplotlib" ];then
-	cd plotters/matplotlib
-	python loadaverage.py
-	python tasks.py
-	python cpu.py
-	python ram.py
-	python swap.py
-
-        # it is still missing to plot each io device.
-	python iotransfer.py
-	python proc.py
-	python contextsw.py
-	python netinterface.py
-	python sockets.py
+#        cd plotters/matplotlib
+#        python loadaverage.py
+#        python tasks.py
+#        python cpu.py
+#        python ram.py
+#        python swap.py
+# 
+#        # it is still missing to plot each io device.
+#        python iotransfer.py
+#        python proc.py
+#        python contextsw.py
+#        python netinterface.py
+#        python sockets.py
+        echo "This is no longer supported"
 else
 	echo "Variable graph_generator must be \"gnuplot\" or \"matplotlib\", please check sarviewer.properties"
 fi
