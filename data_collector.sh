@@ -143,7 +143,7 @@ elif [ "$#" -ne 0 ];then
 	sar_collectors
 
         #Preprocess SAR output
-        for i in $(sar -d 1 1 | grep -v -E "Linux|DEV|Average|^$" | awk '{print $2}'); do
+        for i in $(sar -d -p 1 1 | grep -v -E "Linux|DEV|Average|^$" | awk '{print $2}'); do
             cat data/iotransfer.dat | grep "$i" > data/iotransfer.dat.$i
         done
 
